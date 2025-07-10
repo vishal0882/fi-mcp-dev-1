@@ -1,4 +1,4 @@
-# fi-mcp-lite
+# fi-mcp-dev
 
 A minimal, hackathon-ready version of the Fi MCP server. This project provides a lightweight mock server for use in hackathons, demos, and development, simulating the core features of the production Fi MCP server with dummy data and simplified authentication.
 
