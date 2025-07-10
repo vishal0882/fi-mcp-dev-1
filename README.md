@@ -4,7 +4,7 @@ A minimal, hackathon-ready version of the Fi MCP server. This project provides a
 
 ## Purpose
 
-- **fi-mcp-lite** is designed for hackathon participants and developers who want to experiment with the Fi MCP API without accessing real user data or production systems.
+- **fi-mcp-dev** is designed for hackathon participants and developers who want to experiment with the Fi MCP API without accessing real user data or production systems.
 - It serves dummy financial data and uses a dummy authentication flow, making it safe and easy to use in non-production environments.
 
 ## Features
