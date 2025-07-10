@@ -191,16 +191,25 @@
         }
         
         .qr-code {
-            width: 120px;
-            height: 120px;
-            background: #ffffff;
-            border-radius: 12px;
+            width: 140px;
+            height: 140px;
             margin: 0 auto 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 12px;
-            color: #000;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px 0 rgba(0,0,0,0.12);
+            border: 4px solid #fff;
+        }
+        .qr-code img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            border-radius: 12px;
+            border: none;
+            background: transparent;
         }
         
         .download-btn {
@@ -335,30 +344,7 @@
             
             <div class="qr-section">
                 <div class="qr-code">
-                    <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.5">
-                        <rect x="3" y="3" width="5" height="5"/>
-                        <rect x="16" y="3" width="5" height="5"/>
-                        <rect x="3" y="16" width="5" height="5"/>
-                        <rect x="4" y="4" width="3" height="3"/>
-                        <rect x="17" y="4" width="3" height="3"/>
-                        <rect x="4" y="17" width="3" height="3"/>
-                        <rect x="9" y="9" width="1" height="1"/>
-                        <rect x="11" y="9" width="1" height="1"/>
-                        <rect x="13" y="9" width="1" height="1"/>
-                        <rect x="15" y="9" width="1" height="1"/>
-                        <rect x="9" y="11" width="1" height="1"/>
-                        <rect x="11" y="11" width="1" height="1"/>
-                        <rect x="13" y="11" width="1" height="1"/>
-                        <rect x="15" y="11" width="1" height="1"/>
-                        <rect x="9" y="13" width="1" height="1"/>
-                        <rect x="11" y="13" width="1" height="1"/>
-                        <rect x="13" y="13" width="1" height="1"/>
-                        <rect x="15" y="13" width="1" height="1"/>
-                        <rect x="9" y="15" width="1" height="1"/>
-                        <rect x="11" y="15" width="1" height="1"/>
-                        <rect x="13" y="15" width="1" height="1"/>
-                        <rect x="15" y="15" width="1" height="1"/>
-                    </svg>
+                    <img src="/static/fi_qr.png" alt="Fi QR Code" />
                 </div>
                 <button class="download-btn">Download Fi</button>
                 <br>

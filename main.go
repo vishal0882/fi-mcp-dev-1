@@ -51,6 +51,7 @@ func main() {
 
 	// Configure streamable HTTP server with proper endpoints
 	httpMux := http.NewServeMux()
+	httpMux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 	streamableServer := server.NewStreamableHTTPServer(s,
 		server.WithEndpointPath("/stream"),
 	)
