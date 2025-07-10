@@ -13,6 +13,10 @@ import (
 	"github.com/epifi/fi-mcp-lite/pkg"
 )
 
+var (
+	loginRequiredJson = `{"status": "login_required","login_url": "%s","message": "Needs to login first by going to the login url.\nShow the login url as clickable link if client supports it. Otherwise display the URL for users to copy and paste into a browser. \nAsk users to come back and let you know once they are done with login in their browser"}`
+)
+
 type AuthMiddleware struct {
 	sessionStore map[string]string
 }
@@ -31,8 +35,7 @@ func (m *AuthMiddleware) AuthMiddleware(next server.ToolHandlerFunc) server.Tool
 		phoneNumber, ok := m.sessionStore[sessionId]
 		if !ok {
 			loginUrl := m.getLoginUrl(sessionId)
-			res := fmt.Sprintf("Please login by clicking this link: [Login](%s)\n\n. Present it as a clickable link if client supports it. Display the URL too to copy and paste it into a browser: %s\n\nAfter completing the login in your browser, let me know and I'll continue with your request.", loginUrl, loginUrl)
-			return mcp.NewToolResultText(res), nil
+			return mcp.NewToolResultText(fmt.Sprintf(loginRequiredJson, loginUrl)), nil
 		}
 		if !lo.Contains(pkg.GetAllowedMobileNumbers(), phoneNumber) {
 			return mcp.NewToolResultError("phone number is not allowed"), nil
