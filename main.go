@@ -29,25 +29,10 @@ func main() {
 		server.WithToolHandlerMiddleware(authMiddleware.AuthMiddleware),
 	)
 
-	s.AddTool(mcp.NewTool("fetch_net_worth",
-		mcp.WithDescription("Calculate comprehensive net worth using ONLY actual data from accounts users connected on Fi Money including:\n- Bank account balances\n- Mutual fund investment holdings\n- Indian Stocks investment holdings\n- Total US Stocks investment (If investing through Fi Money app)\n- EPF account balances\n- Credit card debt and loan balances (if credit report connected)\n- Any other assets/liabilities linked to Fi Money platform\n\nUse this tool when the user asks for:\n- Their current net worth along with their holdings\n- Analysis of their mutual funds, stocks holdings\n- Use their assets information to give more personalized information \n\nIMPORTANT: This tool returns ONLY declared account data. It does not estimate or calculate values for unconnected accounts. If user has assets/liabilities not connected to Fi Money, they will not be included in calculations.\n\nERROR HANDLING: \n- If mutual funds are not detected, please ask the user whether they hold any mutual funds and prompt them to connect their mutual fund accounts via the Fi app.\n- If no financial accounts are connected that the user specifically asked for, returns empty result with message to connect those accounts in Fi Money app."),
-	), dummyHandler)
-
-	s.AddTool(mcp.NewTool("fetch_credit_report",
-		mcp.WithDescription("Retrieve comprehensive credit report including scores, active loans, credit card utilization, payment history, date of birth and recent inquiries from connected credit bureaus.\n\nUse this tool when the user asks for:\n- Their credit score related information\n- This tool can provide their age related information through date of birth\n- Which loans to close first based on the loan that has the highest interest rate\n\nIMPORTANT LIMITATIONS:\n- Only returns credit data if user has successfully connected their credit profile in Fi Money app\n- Cannot access credit data from bureaus not integrated with Fi Money platform\n\nERROR HANDLING: If no credit score data is found, respond with: \"No credit score data available. Please connect your credit score in the Fi Money app and try again.\""),
-	), dummyHandler)
-
-	s.AddTool(mcp.NewTool("fetch_epf_details",
-		mcp.WithDescription("Retrieve detailed EPF (Employee Provident Fund) account information including:\n- Account balance and contributions\n- Employer and employee contribution history\n- Interest earned and credited amounts\n\nIMPORTANT LIMITATIONS:\n- Only returns EPF data if user has successfully linked their EPF account through Fi Money app\n- Data accuracy depends on EPFO integration and user's UAN verification status\n- Transaction history and account statements and passbooks are not available\n\nERROR HANDLING: If EPF account not connected, direct user to link EPF account in Fi Money app using their UAN and other required details.\n"),
-	), dummyHandler)
-
-	s.AddTool(mcp.NewTool("fetch_mf_transactions",
-		mcp.WithDescription("Retrieve detailed transaction history from accounts connected to Fi Money platform including:\n- Mutual fund transactions\n\nUse this tool when the user asks for:\n- Their portfolio level XIRR (For now, it is only applicable to Mutual funds)\n\nIMPORTANT LIMITATIONS:\n- Current version does NOT include historical bank transactions, historical stocks transactions, NPS, deposits.\n\nERROR HANDLING: Returns only available transaction data with clear indication of data source limitations.\n"),
-	), dummyHandler)
-
-	s.AddTool(mcp.NewTool("fetch_bank_transactions",
-		mcp.WithDescription("Retrieve detailed bank transactions for each bank account connected to Fi money platform"),
-	), dummyHandler)
+	// Register tools from pkg.ToolList
+	for _, tool := range pkg.ToolList {
+		s.AddTool(mcp.NewTool(tool.Name, mcp.WithDescription(tool.Description)), dummyHandler)
+	}
 
 	// Configure streamable HTTP server with proper endpoints
 	httpMux := http.NewServeMux()
