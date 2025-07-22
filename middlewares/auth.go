@@ -53,6 +53,8 @@ func (m *AuthMiddleware) AuthMiddleware(next server.ToolHandlerFunc) server.Tool
 
 // GetLoginUrl fetches dynamic login url for given sessionId
 func (m *AuthMiddleware) getLoginUrl(sessionId string) string {
+	//return fmt.Sprintf("http://localhost:%s/mockWebPage?sessionId=%s", pkg.GetPort(), sessionId)
+	fmt.Print(fmt.Sprintf("http://localhost:%s/mockWebPage?sessionId=%s", pkg.GetPort(), sessionId))
 	return fmt.Sprintf("http://localhost:%s/mockWebPage?sessionId=%s", pkg.GetPort(), sessionId)
 }
 
