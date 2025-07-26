@@ -106,6 +106,34 @@ The server will start on [http://localhost:8080](http://localhost:8080).
 curl -X POST -H "Content-Type: application/json" -H "Mcp-Session-Id: mcp-session-594e48ea-fea1-40ef-8c52-7552dd9272af" -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"fetch_bank_transactions","arguments":{}}}' http://localhost:8080/mcp/stream
 ```
 
+## Simple fastmcp python client
+```py
+from mcp.client.streamable_http import streamablehttp_client
+from mcp.client.session import ClientSession
+import asyncio
+ 
+async def main():
+    try:
+        async with streamablehttp_client("http://localhost:8080/mcp/stream") as (
+            read_stream,
+            write_stream,
+            _,
+        ):
+            async with ClientSession(
+                read_stream,
+                write_stream,
+            ) as session:
+                await session.initialize()
+                tools = await session.list_tools()
+                print(tools)
+    except Exception as e:
+        print(f"error: {e}")
+
+if __name__ == "__main__":
+    asyncio.run(main())
+
+```
+
 If you run it once you will get `login_url` in response, running it again after login will give you the data
 
 ## FAQ
