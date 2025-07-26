@@ -107,3 +107,7 @@ curl -X POST -H "Content-Type: application/json" -H "Mcp-Session-Id: mcp-session
 ```
 
 If you run it once you will get `login_url` in response, running it again after login will give you the data
+
+#### Skipping auth(NOT RECOMMENDED)
+
+Refer to [this](https://github.com/epiFi/fi-mcp-dev/issues/3) on how to skip auth
