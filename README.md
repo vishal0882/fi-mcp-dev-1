@@ -141,3 +141,7 @@ If you run it once you will get `login_url` in response, running it again after 
 - Why do I need to login everytime in ADKs?
   
   A session in MCP is one to one connection between MCP server and MCP client and needs login once. If your ADK have multiple agents and you are creating multiple clients for them make sure you maintain a common sessionId and pass that around. But in case you want to skip auth entirely, although not recommeneded because we want your agents to work on production usecases, you can refer to [this](https://github.com/epiFi/fi-mcp-dev/issues/3) issue on how to skip auth
+
+- Why am I getting invalid session id?
+
+  If you are creating custom session id before client initialization then make sure you prefix it with `mcp-session-`. For example: `3ef38b37-323a-4bbd-acbb-3fe02f97783f` is not valid and `mcp-session-3ef38b37-323a-4bbd-acbb-3fe02f97783f` is valid
