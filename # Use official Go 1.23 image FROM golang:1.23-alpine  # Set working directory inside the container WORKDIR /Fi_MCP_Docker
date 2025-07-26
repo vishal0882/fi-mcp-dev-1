@@ -1,0 +1,20 @@
+# Use official Go 1.23 image
+FROM golang:1.23-alpine
+
+# Set working directory inside the container
+WORKDIR /app
+
+# Copy the rest of the application source code
+COPY . .
+
+# Run `go mod tidy` to ensure clean dependency resolution
+RUN go mod tidy
+
+# Set environment variable required at runtime
+ENV FI_MCP_PORT=8080
+
+# Expose the port
+EXPOSE 8080
+
+# Run the Go app
+CMD ["go", "run", "."]
