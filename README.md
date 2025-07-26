@@ -49,15 +49,7 @@ The dummy data covers a variety of user states. Example scenarios:
 | 1414141414  | Salary Sinkhole. User’s salary is mostly consumed by EMIs and credit card bills. Salary credit every month. 70% goes to EMIs and credit card dues. Low or zero investment. Credit score ~600–650.                                                                                                   |
 | 1313131313  | Balanced Growth Tracker. Well-diversified portfolio with EPF, MFs, stocks, and some US exposure. High EPF contribution. SIPs in equity & hybrid MFs. International MFs/ETFs 10–20%. Healthy net worth growth. Good credit score (750+).                                                             |
 | 2020202020  | Starter Saver. Recently started investing, low ticket sizes, few transactions. Just 1–2 MFs, started < 6 months ago. SIP ₹500–₹1000. Minimal bank balance, no debt.                                                                                                                                 |
-| 1515151515  | Ghost Portfolio. Has old investments but hasn’t made any changes in years. No MF purchase/redemption in 3 years. EPF stagnant or partially withdrawn. No SIPs or salary inflow. Flat or declining net worth.                                                                                        |
-| 1616161616  | Early Retirement Dreamer. Optimizing investments to retire by 40. High savings rate, frugal lifestyle. Aggressive equity exposure (80–90%). Lean monthly expenses. Heavy SIPs + NPS + EPF contributions. No loans, no luxury spending. Targets 30x yearly expenses net worth.                       |
-| 1717171717  | The Swinger. Regularly buys/sells MFs and stocks, seeks short-term gains. Many MF redemptions within 6 months. Equity funds only, high churn. No SIPs. Short holding periods. High txn volume in bank account.                                                                                      |
-| 1818181818  | Passive Contributor. No personal income, but has EPF from a past job and joint bank accounts. Old EPF, no current contributions. No active SIPs. Transactions reflect shared household spending. No credit score record (no loans/credit card).                                                     |
-| 1919191919  | Section 80C Strategist. Uses ELSS, EPF, NPS primarily to optimize taxes. ELSS SIPs in Q4 (Jan–Mar). EPF active. NPS data if available. No non-tax-saving investments. Low-risk debt funds as balance.                                                                                               |
 | 2121212121  | Dual Income Dynamo. Has freelance + salary income; cash flow is uneven but investing steadily. Salary + multiple credits from UPI apps. MF investments irregular but increasing. High liquidity in bank accounts. Credit score above 700. Occasional business loans or overdraft.                   |
-| 2222222222  | Sudden Wealth Receiver. Recently inherited wealth, learning how to manage it. Lump sum investments across categories. High idle cash in bank. Recent MF purchases, no SIPs yet. No credit history or debt. EPF missing or dormant.                                                                  |
-| 2323232323  | Overseas Optimizer. NRI who continues to manage Indian EPF, MFs, and bank accounts. Large EPF corpus. No salary inflows, occasional foreign remittances. MF transactions in bulk. Indian address missing or outdated. No credit card usage in India.                                                |
-| 2424242424  | Mattress Money Mindset. Doesn’t trust the market; everything is in bank savings and FDs. 95% net worth in FDs/savings. No mutual funds or stocks. EPF maybe present. No debt or credit score. Low but consistent net worth growth.                                                                  |
 | 2525252525  | Live-for-Today. High income but spends it all. Investments are negligible or erratic. Salary > ₹2L/month. High food, shopping, travel spends. No SIPs, maybe one-time MF buy. Credit card dues often roll over. Credit score < 700, low or zero net worth.                                          |
 
 ## Example: Dummy Data File
@@ -109,3 +101,47 @@ The server will start on [http://localhost:8080](http://localhost:8080).
 - When prompted for login, use one of the above phone numbers
 - Otp/Passcode can be anything on the webpage
 
+## Simple curl client
+```bash
+curl -X POST -H "Content-Type: application/json" -H "Mcp-Session-Id: mcp-session-594e48ea-fea1-40ef-8c52-7552dd9272af" -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"fetch_bank_transactions","arguments":{}}}' http://localhost:8080/mcp/stream
+```
+
+If you run it once you will get `login_url` in response, running it again after login will give you the data
+
+## Simple fastmcp python client
+```py
+from mcp.client.streamable_http import streamablehttp_client
+from mcp.client.session import ClientSession
+import asyncio
+ 
+async def main():
+    try:
+        async with streamablehttp_client("http://localhost:8080/mcp/stream") as (
+            read_stream,
+            write_stream,
+            _,
+        ):
+            async with ClientSession(
+                read_stream,
+                write_stream,
+            ) as session:
+                await session.initialize()
+                tools = await session.list_tools()
+                print(tools)
+    except Exception as e:
+        print(f"error: {e}")
+
+if __name__ == "__main__":
+    asyncio.run(main())
+
+```
+
+## FAQ
+
+- Why do I need to login everytime in ADKs?
+  
+  A session in MCP is one to one connection between MCP server and MCP client and needs login once. If your ADK have multiple agents and you are creating multiple clients for them make sure you maintain a common sessionId and pass that around. But in case you want to skip auth entirely, although not recommeneded because we want your agents to work on production usecases, you can refer to [this](https://github.com/epiFi/fi-mcp-dev/issues/3) issue on how to skip auth
+
+- Why am I getting invalid session id?
+
+  If you are creating custom session id before client initialization then make sure you prefix it with `mcp-session-`. For example: `3ef38b37-323a-4bbd-acbb-3fe02f97783f` is not valid and `mcp-session-3ef38b37-323a-4bbd-acbb-3fe02f97783f` is valid
