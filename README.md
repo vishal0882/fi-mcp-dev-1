@@ -108,6 +108,8 @@ curl -X POST -H "Content-Type: application/json" -H "Mcp-Session-Id: mcp-session
 
 If you run it once you will get `login_url` in response, running it again after login will give you the data
 
-#### Skipping auth(NOT RECOMMENDED)
+## FAQ
 
-Refer to [this](https://github.com/epiFi/fi-mcp-dev/issues/3) on how to skip auth
+- Why do I need to login everytime in ADKs?
+  
+  A session in MCP is one to one connection between MCP server and MCP client and needs login once. If your ADK have multiple agents and you are creating multiple clients for them make sure you maintain a common sessionId and pass that around. But in case you want to skip auth entirely, although not recommeneded because we want your agents to work on production usecases, you can refer to [this](https://github.com/epiFi/fi-mcp-dev/issues/3) issue on how to skip auth
